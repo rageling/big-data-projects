@@ -1,0 +1,81 @@
+cdc2015<-read.csv(file.choose())
+
+save(cdc2015, file="cdc2015.RData")
+
+drop(data)
+library(fivethirtyeight)
+library(dplyr)
+rm(data)
+vignette("police_killings", package = "fivethirtyeight")
+View(police_killings)
+View("fivethirtyeight")
+data<-police_killings
+boxplot(count(age)~armed,data)
+barplot(age~armed,data)
+movieplot <- ggplot(movie, aes(x=movie$Budget, y=movie$Runtime)) + geom_point(shape=1) + geom_smooth(method=lm) summary(lm(movie$Budget~movie$Runtime))
+
+mnpolicekillings <- police_killings %>% group_by(state) %>% filter(state=='MN')
+View(mnpolicekillings)
+boxplot()
+
+View(cdc2015)
+
+boxplot(detail_age~sex,data=cdc2015)
+drugdeaths <- cdc2015 %>% filter(detail_age != 999 & X358_cause_recode == 420 & X358_cause_recode == 425 & X358_cause_recode == 433 & X358_cause_recode == 443)
+
+drugdeaths <- cdc2015 %>% filter(detail_age != 999) %>% filter(X358_cause_recode == 420|X358_cause_recode == 425|X358_cause_recode == 433|X358_cause_recode == 443)
+
+
+femaledrugdeaths <- x42drugdeaths %>% filter(sex == "F")
+samplefemalegroup <- sample_n(femaledrugdeaths,100)
+
+maledrugdeaths <- x42drugdeaths %>% filter(sex == "M")
+samplemalegroup <- sample_n(maledrugdeaths,100)
+
+combinedgroups <- bind_rows(samplemalegroup,samplefemalegroup)
+
+boxplot(detail_age~sex, data = combinedgroups)
+
+summary(drugdeaths$icd_code_10th_revision)
+
+View(samplefemalegroup)
+View(combinedgroups)
+boxplot(detail_age~sex, data = combinedgroups)
+
+boxplot(detail_age~race_recode_5, data = combinedgroups)
+
+agecount<-table(x42drugdeaths$detail_age)
+View(drugdeaths)
+barplot(agecount)
+
+
+x42drugdeaths <- cdc2015 %>% filter(detail_age != 999) %>% filter(icd_code_10th_revision == "X42")%>% filter(race_recode_5 == 1)
+
+summary(boxplot(detail_age~race_recode_5, x42drugdeaths))
+summary(x42drugdeaths$race_recode_5)
+
+hist(x42drugdeaths$race_recode_5)
+count <- table(x42drugdeaths$education_2003_revision)
+barplot(count,names.arg = c("8th grade or less", "9-12th, no diploma", "high school graduate or GED completed", "some college credit, but no dgree", "Associate degree","Bachelor's Degree","Master's degree", "Doctorate or professional degree", "unknown"))
+table(count)
+
+
+
+
+
+
+
+
+x42drugdeaths <- cdc2015 %>% filter(detail_age != 999) %>% filter(icd_code_10th_revision == "X42")
+
+femaledrugdeaths <- x42drugdeaths %>% filter(sex == "F")
+samplefemalegroup <- sample_n(femaledrugdeaths,100, replace = TRUE)
+
+maledrugdeaths <- x42drugdeaths %>% filter(sex == "M")
+samplemalegroup <- sample_n(maledrugdeaths,100, replace = TRUE)
+
+save(samplefemalegroup, file="samplefemalegroup.RData")
+save(samplemalegroup, file="samplemalegroup.RData")
+
+
+
